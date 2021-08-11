@@ -1,4 +1,4 @@
-COMMON SHARED L0,L10,I14,I15(),L16(),L17(),L18(),L22$,I24,cursorX,L30
+COMMON SHARED startTime,L10,I14,I15(),L16(),L17(),L18(),L22$,I24,cursorX,L30
 COMMON SHARED L36$,L39,L81,L87,L88,L95,L105,I107$,L109,L110,L111
 COMMON SHARED L112,L113,I114,L134,L137,L138,I139,I140,I141,L142$,L143
 COMMON SHARED L144,L145,L146,L147,L149,L150,L154,L156,I186,I188,I189
@@ -6,7 +6,7 @@ COMMON SHARED L191,I192(),I193,I195,I197,I199,I201,I203,I205,I207,I209
 COMMON SHARED I211,I213,I215,I217,I219,I221,I223,I225,I228,I230,I232
 COMMON SHARED I234,I236,I238,I239,I241,I243,I245,I247,I250,I252,I255
 COMMON SHARED L261,L263,L265,L270$,I272,L274$,L275$,L276,L279,L280,L281
-COMMON SHARED L282,L284,I286,L287,L294,L299,I300(),L302(),L305,L306,L311()
+COMMON SHARED L282,L284,I286,L287,L294,gameTime,I300(),L302(),L305,L306,L311()
 COMMON SHARED L312(),I313,L314(),L315$(),I316(),I317,I318(),L319(),L320,L321,L322$()
 COMMON SHARED L323$(),L325$,I327,L336,L338,L339$(),I340,L341,L343,L348$,L355
 COMMON SHARED L357$,I358,I359,L364,L367,L370,L371,I375,I376,I377,L384
@@ -19,11 +19,13 @@ COMMON SHARED L623,L628,L629,L630,L631,L632,L633,L634
 110 Rem COM() statements in this programme
 120 Call S16760
 130 Key OFF
-140 L0 = Timer
-150 On STRIG(2) GOSUB S12280
-160 On STRIG(0) GOSUB S12220
-170 On STRIG(4) GOSUB S12340
-180 On STRIG(6) GOSUB S12400
+140 startTime = Timer
+
+150 On STRIG(2) GOSUB S12280 ' joystick: Lower joystick B trigger was pressed since last STRIG(2)
+160 On STRIG(0) GOSUB S12220 ' joystick: Lower joystick A trigger was pressed since last STRIG(0)
+170 On STRIG(4) GOSUB S12340 ' joystick: Upper joystick A trigger was pressed since last STRIG(4)
+180 On STRIG(6) GOSUB S12400 ' joystick: Upper joystick B trigger was pressed since last STRIG(6)
+
 190 GOSUB S12170
 200 GOSUB S12510
 210 On Error GoTo 2280
@@ -89,6 +91,7 @@ Rem error 17 (2 )
 800 If L22$ <> "" Then GoTo 820
 810 GoTo 790
 820 Screen 1
+
 830 Subroutine S840
 840 Cls
 850 LOCATE 1, 1
@@ -97,6 +100,7 @@ Rem error 17 (2 )
 880 IR12 = (L22$ = "Yuri")
 890 IR14 = ((L22$ = "yuri") Or (L22$ = "Yuri"))
 900 If ((L22$ = "YURI") Or (IR14)) = 0 Then GoTo 930
+
 910 Subroutine S920
 920 GoTo 940
 930 System
@@ -149,6 +153,7 @@ Rem error 17 (2 )
 1400 SOUND L95, 0.3
 1410 SOUND L87, 0.5
 1420 I14 = 3
+
 1430 Subroutine S1440
 1440 For I14 = 1 To 1600
 1450 Next
@@ -180,6 +185,7 @@ Rem error 17 (2 )
 1710 I114 = 1
 1720 IR12 = (L22$ = "x")
 1730 If ((L22$ = "g") Or (L22$ = "x")) = 0 Then GoTo 1750
+
 1740 Subroutine S1750
 1750 GoTo 1560
 1760 I107$ = I107$ - 10
@@ -208,6 +214,7 @@ Rem error 17 (2 )
 1990 SOUND L95, 0.1
 2000 If (I107$ / 10) <> 0# Then GoTo 2020
 2010 SOUND L95, 0.1
+
 2020 Subroutine S2030
 2030 I107$ = I107$ + 10
 2040 If I107$ <> 360 Then GoTo 2060
@@ -233,6 +240,7 @@ Rem error 17 (2 )
 2240 SOUND L95, 0.1
 2250 If (I107$ / 10) <> 0# Then GoTo 2270
 2260 SOUND L95, 0.1
+
 2270 Subroutine S2280
 2280 SWAP TIMER,'Might be BEEP instead!
 2290 Cls
@@ -533,11 +541,13 @@ Rem error 17 (2 )
 5240 SOUND L280, 1
 5250 SOUND L88, 0.1
 5260 SOUND L281, 0.5
+
 5270 Subroutine S5280
 5280 For L282 = 1 To 5
 5290   SOUND L95, 0.2
 5300   SOUND 32676, 3
 5310 Next
+
 5320 Subroutine S5330
 5330 SOUND L279, 0.1
 5340 SOUND L95, 0.5
@@ -546,6 +556,7 @@ Rem error 17 (2 )
 5370 Next
 5380 SOUND L281, 0.5
 5390 SOUND L134, 0.5
+
 5400 Subroutine S5410
 5410 For I286 = 50 To 100 Step 5
 5420   SOUND I286, 0.5
@@ -557,6 +568,7 @@ Rem error 17 (2 )
 5480 Next
 5490 SOUND 32676, 0.5
 5500 SOUND L87, 0.5
+
 5510 Subroutine S5520
 5520 For I286 = 50 To 80
 5530   SOUND L95, 0.1
@@ -570,6 +582,7 @@ Rem error 17 (2 )
 5610 SOUND 32676, 2
 5620 SOUND L95, 0.2
 5630 SOUND 32676, 2
+
 5640 Subroutine S5650
 5650 LOCATE 1, 8
 5660 Print "Load game 1,2,3 or 4?"
@@ -578,7 +591,7 @@ Rem error 17 (2 )
 5690 If ((L294 > 4) Or (L294 < 0#)) = 0 Then GoTo 5710
 5700 GoTo 5650
 5710 Open "saver" + Chr$(L294 + 97) + ".pac" For Input As #1
-5720 Input #1, L36$, L144, L299, L270$, L274$, L22$, L275$
+5720 Input #1, L36$, L144, gameTime, L270$, L274$, L22$, L275$
 5730 For I14 = 1 To 65
 5740   Input #1, I300(I14)
 5750 Next
@@ -588,6 +601,7 @@ Rem error 17 (2 )
 5790 Next
 5800 LOCATE 2, 1
 5810 Print "Load is complete!              "
+
 5820 Subroutine S5830
 5830 LOCATE 1, 8
 5840 Print "Save under 1,2,3, or 4?"
@@ -596,12 +610,13 @@ Rem error 17 (2 )
 5870 If ((L294 > 4) Or (L294 < 0#)) = 0 Then GoTo 5890
 5880 GoTo 5830
 5890 Open "saver" + Chr$(L294 + 97) + ".pac" For Output As #1
-5900 Write #1, L36$, L144, L299, L270$, L274$, L22$, L275$
+5900 Write #1, L36$, L144, gameTime, L270$, L274$, L22$, L275$
 5910 For I14 = 1 To 65
 5920   Write #1, I300(I14)
 5930 Next
 5940 LOCATE 2, 1
 5950 Print "Save is complete!              "
+
 5960 Subroutine S5970
 5970 LOCATE 1, 1
 5980 Print "Do you really want to quit?"
@@ -611,6 +626,7 @@ Rem error 17 (2 )
 6020 IR12 = (L22$ = "y")
 6030 If ((L22$ = "y") Or (L22$ = "y")) = 0 Then GoTo 6050
 6040 System
+
 6050 Subroutine S6060
 6060 GOSUB S12460
 6070 LOCATE 1, 1
@@ -622,6 +638,7 @@ Rem error 17 (2 )
 6130   If L311(I14) <> 0# Then GoTo 6150
 6140   I14 = 110
 6150 Next
+
 6160 Subroutine S6170
 6170 I313 = I14
 6180 I14 = Round(L314(I14))
@@ -685,12 +702,14 @@ Rem error 17 (2 )
 6760 If L319(I14) <> 19 Then GoTo 6780
 6770 GOSUB S5520
 6780 If L339$(I14) <> "" Then GoTo 6800
+
 6790 Subroutine S6800
 6800 For I340 = 1 To 500
 6810 Next
 6820 GOSUB S5280
 6830 If L339$(I14) <> "dial" Then GoTo 6860
 6840 GOSUB S1540
+
 6850 Subroutine S6860
 6860 If L339$(I14) <> "end" Then GoTo 6880
 6870 GoTo 14260
@@ -710,10 +729,11 @@ Rem error 17 (2 )
 7010 L325$ = "z"
 7020 L144 = L144 + 30
 7030 GOSUB S9230
+
 7040 Subroutine S7050
 7050 PUT (I24,cursorX),L33,XOR
-7060 L299 = (Timer - L0) + L299
-7070 L0 = Timer
+7060 gameTime = (Timer - startTime) + gameTime
+7070 startTime = Timer
 7080 If (L144 * L143) <= 35 Then GoTo 7100
 7090 GOSUB S10510
 7100 If I272 <> 1 Then GoTo 7180
@@ -791,6 +811,7 @@ Rem error 17 (2 )
 7820 KEY ON
 7830 Print 0
 7840 L36$ = "hallez"
+
 7850 Subroutine S7860
 7860 Close
 7870 Open L36$ + ".pac" For Input As #1
@@ -878,6 +899,7 @@ Rem error 17 (2 )
 8690   Next
 8700   PUT (140,I14),L403,XOR
 8710 Next
+
 8720 Subroutine S8730
 8730 GoTo 8880 '????
 8740 PUT (140,I14),L278,XOR
@@ -895,6 +917,7 @@ Rem error 17 (2 )
 8860 PUT (140,I14),L403,XOR
 8870 I14 = I14 + -2
 8880 If I14 >= 120 Then GoTo 8740
+
 8890 Subroutine S8900
 8900 For I14 = 140 To 195 Step 3
 8910   PUT (I14,130),L278,XOR
@@ -911,6 +934,7 @@ Rem error 17 (2 )
 9020   Next
 9030   PUT (I14,130),L403,XOR
 9040 Next
+
 9050 Subroutine S9060
 9060 GoTo 9210 '????
 9070 PUT (I14,130),L278,XOR
@@ -928,6 +952,7 @@ Rem error 17 (2 )
 9190 PUT (I14,130),L403,XOR
 9200 I14 = I14 + -3
 9210 If I14 >= 90 Then GoTo 9070
+
 9220 Subroutine S9230
 9230 If L275$ <> "4" Then GoTo 9250
 9240 PUT (140,130),L415,XOR
@@ -962,6 +987,7 @@ Rem error 17 (2 )
 9530 If L22$ <> "3" Then GoTo 9550
 9540 PUT (140,130),L429,XOR
 9550 L275$ = L22$
+
 9560 Subroutine S9570
 9570 GET (1,1)-(3,18),L421
 9580 GET (1,1)-(3,18),L423
@@ -977,6 +1003,7 @@ Rem error 17 (2 )
 9680   IR12 = (I14 * 2)
 9690   Input #1, I431(I14), L432(IR12), L433(IR12), L434(IR12), L435(IR12), L436(IR12), L437(IR12), L438(IR12)
 9700 Next
+
 9710 Subroutine S9720
 9720 I440 = L439 - I24
 9730 I442 = L441 - cursorX
@@ -996,6 +1023,7 @@ Rem error 17 (2 )
 9870 L22$ = "7"
 9880 If ((I442 > I440) And ((I442 < I440) And (I442 > 0))) = 0 Then GoTo 9900
 9890 L22$ = "4"
+
 9900 Subroutine S9910
 9910 Close
 9920 Open "wilb.pct" For Input As #1
@@ -1045,6 +1073,7 @@ Rem error 17 (2 )
 10360 PUT (135,135),L278,XOR
 10370 If L448$ <> "y" Then GoTo 10400
 10380 L448$ = ""
+
 10390 Subroutine S10400
 10400 I14 = 0
 10410 L339$(I14) = "death"
@@ -1060,6 +1089,7 @@ Rem error 17 (2 )
 10510 IR12 = (I449 = 0)
 10520 IR14 = ((L36$ <> "room3") Or (I449 = 0))
 10530 If ((L348$ = "d") Or (IR14)) = 0 Then GoTo 10550
+
 10540 Subroutine S10550
 10550 If I451 <> 1 Then GoTo 10570
 10560 GoTo 10720
@@ -1083,13 +1113,16 @@ Rem error 17 (2 )
 10740 PLAY "<<f6p20d7p20g-7p20e-7p20a5>>"
 10750 I451 = 1
 10760 L348$ = "d"
+
 10770 Subroutine S10780
 10780 If I186 <= 22 Then GoTo 10810
 10790 I188 = 21
 10800 I186 = 6
 10810 End
+
       Subroutine S10820
 10820 If I272 <> 1 Then GoTo 10840
+
 10830 Subroutine 10840
 10840 IR12 = (L36$ = "room7")
 10850 IR14 = (((L144 * L143) > 0) And IR12)
@@ -1165,6 +1198,7 @@ Rem error 17 (2 )
 11550 GOSUB S10140
 11560 If (L144 * L143) <= 30 Then GoTo 11580
 11570 I471 = 1
+
 11580 Subroutine S11590
 11590 LOCATE I186, I188 - 1
 11600 Print " "
@@ -1192,10 +1226,12 @@ Rem error 17 (2 )
 11820 Print "                                                                              "
 11830 LOCATE 1, 1
 11840 Print L476$(I192((I186 + 1) + (L191 * I188)))
+
 11850 Subroutine S11860
 11860 I477 = STICK(0)
 11870 L478 = STICK(1)
 11880 If ((L478 = 0#) And (I477 = 0)) = 0 Then GoTo 11900
+
 11890 Subroutine S11900
 11900 If I477 >= 40 Then GoTo 11920
 11910 L22$ = "4"
@@ -1223,40 +1259,51 @@ Rem error 17 (2 )
 12130 IR26 = ((L22$ = "8") Or (IR24))
 12140 If ((L22$ = "9") Or (IR26)) = 0 Then GoTo 12160
 12150 L482$ = ""
+
 12160 Subroutine S12170
 12170 STRIG(0) ON
 12180 STRIG(2) ON
 12190 STRIG(4) ON
 12200 STRIG(6) ON
+
 12210 Subroutine S12220
 12220 If L482$ <> "l" Then GoTo 12250
 12230 Subroutine S12240
 12240 GoTo 12280
 12250 L22$ = "l"
 12260 L482$ = "l"
-12270 Subroutine S12280
+
+' Subroutine S12280
 12280 If L482$ <> "a" Then GoTo 12310
+
 12290 Subroutine S12300
 12300 GoTo 12340
 12310 L22$ = "a"
 12320 L482$ = "a"
+
 12330 Subroutine S12340
 12340 If L482$ <> "g" Then GoTo 12370
+
 12350 Subroutine S12360
 12360 GoTo 12400
 12370 L22$ = "g"
 12380 L482$ = "g"
+
 12390 Subroutine S12400
 12400 If L482$ <> "u" Then GoTo 12430
+
 12410 Subroutine S12420
 12420 GoTo 12460
 12430 L22$ = "u"
 12440 L482$ = "u"
+
 12450 Subroutine S12460
+
 12460 Subroutine S12470
 12470 For I14 = 0 To 6 Step 2
 12480   STRIG(I14) OFF
 12490 Next
+
 12500 Subroutine S12510
 openIngameItemsFile Close
 12520 Open "object.pac" For Input As #1
@@ -1267,6 +1314,7 @@ openIngameItemsFile Close
 12570 LOCATE 1, 1
 12580 Close
 Rem error 18 ()
+
 12590 Subroutine S12600
 12600 If ((I192((I186 + 1) + (L191 * I188)) = 28) And (I317 = 18)) = 0 Then GoTo 12650
 12610 LOCATE 1, 1
@@ -1291,6 +1339,7 @@ Rem error 18 ()
 12800 If L270$ = "" Then GoTo 12830
 12810 If (Timer - L137) >= XYZ Then GoTo 12830
 12820 GoTo 12800
+
 12830 Subroutine S12840
 12840 Key OFF
 12850 Palette 1, 7
@@ -1314,6 +1363,7 @@ Rem error 18 ()
 13030 GoTo 13490
 13040 If I192((I186 + 1) + (L191 * I188)) <> 19 Then GoTo 13060
 13050 GoTo 13710
+
 13060 Subroutine S13070
 13070 Print "   The Zombie Syrem        "
 13080 Print "MPTP this formula harbors  "
@@ -1335,6 +1385,7 @@ Rem error 18 ()
 13240 L22$ = INKEY$
 13250 If L22$ <> "" Then GoTo 13270
 13260 GoTo 13240
+
 13270 Subroutine S13270
 13280 Print "The other doctors have become weary"
 13290 Print "as the research money is drying up. "
@@ -1347,6 +1398,7 @@ Rem error 18 ()
 13360 L22$ = INKEY$
 13370 If L22$ <> "" Then GoTo 13390
 13380 GoTo 13360
+
 13390 Subroutine S13400
 13400 Print "I have concluded another successful"
 13410 Print "expirement. This time though the other"
@@ -1402,6 +1454,7 @@ Rem error 18 ()
 13910 Print "(The rest of the page has been torn out)"
 13920 GoTo 13360
 13930 If ((I272 = 2) Or (I272 = 1)) = 0 Then GoTo 13950
+
 13940 Subroutine S13950
 13950 IR12 = (I358 = 1)
 13960 If ((L36$ = "room4") And IR12) = 0 Then GoTo 14010
@@ -1409,6 +1462,7 @@ Rem error 18 ()
 13980 L142$ = "y"
 13990 GOSUB S10140
 14000 GoTo 14020
+
 14010 Subroutine S14020
 14020 L137 = Timer
 14030 I272 = 1
@@ -1433,6 +1487,7 @@ Rem error 41 ()
 14210 I566 = I566 + 2
 14220 I567 = Round((I566 * 100) / 47)
 14230 Print I567; "% complete";
+
 14240 Subroutine S14250
 14250 Call S15540
 14260 If I358 <> 1 Then GoTo 14290
@@ -1454,6 +1509,7 @@ Rem error 41 ()
 14420 If L22$ <> "l" Then GoTo 14450
 14430 LOCATE 1, 1
 14440 Print "The mental patient is preparing to kill you!"
+
 14450 Subroutine S14460
 14460 SOUND L95, 0.2
 14470 SOUND L87, 0.5
@@ -1465,6 +1521,7 @@ Rem error 41 ()
 14530 Print "You quickly inject him and he crumbles into a distorted heap. "
 14540 L22$ = "n"
 14550 PUT (135,135),L278,XOR
+
 14560 Subroutine S14570
 14570 GoTo 2440
 14580 L137 = Timer
@@ -1502,6 +1559,7 @@ Rem error 41 ()
 14900 Next
 14910 I186 = 6
 14920 I188 = 2
+
 14930 Subroutine S14940
 14940 If I192((I186 + 1) + (L191 * I188)) <> 16 Then GoTo 14960
 14950 GoTo 15030
@@ -1511,6 +1569,7 @@ Rem error 41 ()
 14990 GoTo 12840
 15000 If I192((I186 + 1) + (L191 * I188)) <> 19 Then GoTo 15020
 15010 GoTo 12840
+
 15020 Subroutine S15030
 15030 Palette 1, 6
 15040 Palette 2, 4
@@ -1521,6 +1580,7 @@ Rem error 41 ()
 15090 GoTo 15070
 15100 L270$ = "y"
 15110 Palette 3, 6
+
 15120 Subroutine S15130
 15130 Key OFF
 15140 For I14 = 1 To 300
@@ -1555,13 +1615,17 @@ Rem error 41 ()
 15420 GoTo 15440
 15430 GoTo 15510
 15440 PLAY "<<<g-2g8a+8f+8e8d-3e4f+5f+5e-5e3>d2>>"
+
 15450 Subroutine S15460
 15460 PLAY "<<<d+8e-8<a8g8f3b8g8f+8e3"
 15470 PLAY "  g-2g8a8f+8e8d-3e4f+5c8c8c3>>>"
+
 15480 Subroutine S15490
 15490 PLAY "<<<c3c3d-5d-5c3c3<b-5a-5>c3c3d-5e-5c3c3>>>"
+
 15500 Subroutine S15510
 15510 PLAY "<g8a8b-8b8<c8g8a8b-8a8a8b8a8>>"
+
 15520 Subroutine S15530
 15530 GoTo 16750
 15540 SUB S15540
@@ -1670,6 +1734,7 @@ Rem error 12 (1 )
 16470 R38 = 2
 16480 If R42 <> 3 Then GoTo 16500
 16490 R38 = 6
+
 16500 Subroutine S16510
 Rem error 12 (1 )
 16510 GoTo 16580 '????
@@ -1683,6 +1748,7 @@ Rem error 12 (1 )
 16580 R32 = R32 + 1
 16590 If R32 <= 23 Then GoTo 16520
 16600 Cls
+
 16610 Subroutine S16620
 16620 GET (212,140)-(262,160),R28
 16630 PUT (212,140),R28,XOR
@@ -1695,6 +1761,7 @@ Rem error 12 (212 )
 16690 PUT (R54,140),R28,XOR
 16700 R54 = R54 - 1
 16710 If R54 >= 65 Then GoTo 16660
+
 16720 Subroutine S16730
 16730 Erase R28
 16740 End Sub
@@ -1739,6 +1806,7 @@ Rem error 12 (50 )
 17120 GoTo cleanupAndEnd
 17130 R76 = R76 + 18
 17140 If R76 <= 200 Then GoTo 17080
+
 17150 Subroutine S17160
 Rem error 12 (1 )
 17160 GoTo 17180 '????
@@ -1825,15 +1893,18 @@ Rem error 12 (50 )
 17890 R84 = R84 + 10
 17900 If R84 <= 250 Then GoTo 17860
 17910 If R88 <> 1 Then GoTo 17930
+
 17920 Subroutine S17930
 17930 R80$ = INKEY$
 17940 If (R80$) <> "s" Then GoTo 17960
 17950 GoTo cleanupAndEnd
 17960 SOUND 32576, Int(Rnd * 9)
+
 17970 Subroutine S17980
 17980 y = y + 1
 17990 If (Int(Rnd * 4) + 2) <= y Then GoTo 18010
 18000 GoTo 17850
+
 18010 Subroutine S18020
 Rem error 12 (1 )
 18020 GoTo 18160 '????
@@ -1865,6 +1936,7 @@ Rem error 12 (1 )
 18270 PLAY ">>d8d8c+8<b8>c+4d8e4<<a8d4"
 18280 PLAY "f8a4g8f4a8>c4<b-8a4>c8e4d8c+8<b8a8g8f8e8"
 18290 PLAY "<d8c+8d8e4f8c+4d4"
+
 18300 Subroutine S18310
 18310 Close
 18320 R100$ = "joew2"
@@ -1900,6 +1972,7 @@ Rem error 12 (150 )
 18600 PUT (143,R76),R64,XOR
 18610 R76 = R76 - 2
 18620 If R76 >= 120 Then GoTo 18420
+
 18630 Subroutine ScleanupAndEnd
 cleanupAndEnd Erase R28
 18650 Erase R46
@@ -1907,7 +1980,7 @@ cleanupAndEnd Erase R28
 18670 End Sub
 18680 End
 'Symbol Address  Symbol Address  Symbol Address  Symbol Address
-'L0     0036 E   L10    10A3     I14    2958 IE  I15    0CE6 IA
+'startTime     0036 E   L10    10A3     I14    2958 IE  I15    0CE6 IA
 'L16    0DEC A   L17    0EF2 A   L18    0FF8 A   L22$   2EAE S
 'I24    2EB2 IE  cursorX    2EB4 IE  L30    03DE     L33    2FF4 EA
 'L36$   2EE0 S   L39    0050     L81    0384     L87    0032
@@ -1930,7 +2003,7 @@ cleanupAndEnd Erase R28
 'L265   2BC5     L270$  2F0E S   I272   2F12 IE  L274$  2F14 S
 'L275$  2F18 S   L276   0087     L278   3C08 EA  L279   012C
 'L280   01C2     L281   02BC     L282   2F1C     L284   2F20
-'I286   2F24 I   L287   2710     L294   2F26     L299   2F2A E
+'I286   2F24 I   L287   2710     L294   2F26     gameTime   2F2A E
 'I300   295A IA  L301   3C6A A   L302   2888 EA  L305   2F00
 'L306   2F2C     L311   2B86 A   L312   29F2 A   I313   2F2E IE
 'L314   2D1A A   L315$  0628 SA  I316   0690 IA  I317   2F30 IE
@@ -1961,7 +2034,7 @@ cleanupAndEnd Erase R28
 'L628   0085     L629   0069     L630   009B     L631   0091
 'L632   004B     L633   0078     L634   00AA
 'Symbol Address  Symbol Address  Symbol Address  Symbol Address
-'L87    0032     L0     0036 E   I404   003A IA  L145   003B
+'L87    0032     startTime     0036 E   I404   003A IA  L145   003B
 'L143   003C     L466   0041     L191   0047     L467   004A
 'L632   004B     L39    0050     L468   0058     L623   005E
 'L95    0064     L629   0069     L453   006D     L444   006E
@@ -2003,7 +2076,7 @@ cleanupAndEnd Erase R28
 'L147   2F06 E   L156   2F08     I186   2F0A IE  I188   2F0C IE
 'L270$  2F0E S   I272   2F12 IE  L274$  2F14 S   L275$  2F18 S
 'L282   2F1C     L284   2F20     I286   2F24 I   L294   2F26
-'L299   2F2A E   L306   2F2C     I313   2F2E IE  I317   2F30 IE
+'gameTime   2F2A E   L306   2F2C     I313   2F2E IE  I317   2F30 IE
 'L325$  2F32 S   I327   2F36 IE  I340   2F38 I   L348$  2F3A S
 'L357$  2F3E S   I359   2F42 IE  L370   2F44     L371   2F46
 'I375   2F48 I   I376   2F4A I   I377   2F4C I   L406$  2F4E S
