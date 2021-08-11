@@ -1,4 +1,4 @@
-COMMON SHARED startTime,L10,I14,I15(),L16(),L17(),L18(),L22$,I24,cursorX,L30
+COMMON SHARED startTime,L10,I14,I15(),L16(),L17(),L18(),userKeyPressed$,I24,cursorX,L30
 COMMON SHARED L36$,L39,L81,L87,L88,L95,L105,I107$,L109,L110,L111
 COMMON SHARED L112,L113,I114,L134,L137,L138,I139,I140,I141,L142$,L143
 COMMON SHARED L144,L145,L146,L147,L149,L150,L154,L156,I186,I188,I189
@@ -13,18 +13,18 @@ COMMON SHARED L357$,I358,I359,L364,L367,L370,L371,I375,I376,I377,L384
 COMMON SHARED I386(),L387(),L388(),L389(),L390(),L391(),L392(),L393(),L394(),L395(),I404()
 COMMON SHARED L405(),L406$,L407,I408,L411,I431(),L432(),L433(),L434(),L435(),L436()
 COMMON SHARED L437(),L438(),L439,I440,L441,I442,L444,L445,L448$,I449,I451
-COMMON SHARED L452,L453,L466,L467,L468,I471,L476$(),I477,L478,L482$,I566
+COMMON SHARED L452,L453,L466,L467,L468,I471,L476$(),I477,L478,buttonPressed$,I566
 COMMON SHARED I567,I574,L579,L586,L587,L612,L613,L614,L615,L616,L617
 COMMON SHARED L623,L628,L629,L630,L631,L632,L633,L634
 110 Rem COM() statements in this programme
 120 Call S16760
 130 Key OFF
 140 startTime = Timer
-
-150 On STRIG(2) GOSUB S12280 ' joystick: Lower joystick B trigger was pressed since last STRIG(2)
-160 On STRIG(0) GOSUB S12220 ' joystick: Lower joystick A trigger was pressed since last STRIG(0)
-170 On STRIG(4) GOSUB S12340 ' joystick: Upper joystick A trigger was pressed since last STRIG(4)
-180 On STRIG(6) GOSUB S12400 ' joystick: Upper joystick B trigger was pressed since last STRIG(6)
+' register joystick key press handlers.
+150 On STRIG(2) GOSUB S12280 ' joystick: Lower trigger, joystick B
+160 On STRIG(0) GOSUB S12220 ' joystick: Lower trigger, joystick A
+170 On STRIG(4) GOSUB S12340 ' joystick: Upper trigger, joystick A
+180 On STRIG(6) GOSUB S12400 ' joystick: Upper trigger, joystick B
 
 190 GOSUB S12170
 200 GOSUB S12510
@@ -41,22 +41,22 @@ Rem error 17 (2 )
 300 Screen 1
 310 LOCATE 10, 12
 320 Print "A Kreuzer Production"
-330 L22$ = INKEY$
+330 userKeyPressed$ = INKEY$
 340 GOSUB S9570
-350 L22$ = INKEY$
+350 userKeyPressed$ = INKEY$
 360 Cls
 370 I24 = 122
 380 cursorX = 82
 390 Print " Do you want instructions Y/N"
-400 L22$ = INKEY$
-410 If L22$ <> "" Then GoTo 430
+400 userKeyPressed$ = INKEY$
+410 If userKeyPressed$ <> "" Then GoTo 430
 420 GoTo 400
-430 IR12 = (L22$ = "y")
-440 If ((L22$ = "Y") Or (L22$ = "y")) = 0 Then GoTo 460
+430 IR12 = (userKeyPressed$ = "y")
+440 If ((userKeyPressed$ = "Y") Or (userKeyPressed$ = "y")) = 0 Then GoTo 460
 450 GOSUB S530
 460 DRAW "bm1,1c1r3d3l1u2l1d2l1u2"
 470 GET (1,1)-(4,4),L33
-480 L22$ = "2"
+480 userKeyPressed$ = "2"
 490 L36$ = "room4"
 500 GOSUB S7860
 510 GOSUB S9230
@@ -87,8 +87,8 @@ Rem error 17 (2 )
 760 Print " Get ready to journey into the twisting and contorting shadows of"
 770 Print " your uncle's residence"
 780 Print " PRESS ANY KEY TO CONTINUE "
-790 L22$ = INKEY$
-800 If L22$ <> "" Then GoTo 820
+790 userKeyPressed$ = INKEY$
+800 If userKeyPressed$ <> "" Then GoTo 820
 810 GoTo 790
 820 Screen 1
 
@@ -96,10 +96,10 @@ Rem error 17 (2 )
 840 Cls
 850 LOCATE 1, 1
 860 Print "Whats the password?"
-870 INPUT ""; L22$
-880 IR12 = (L22$ = "Yuri")
-890 IR14 = ((L22$ = "yuri") Or (L22$ = "Yuri"))
-900 If ((L22$ = "YURI") Or (IR14)) = 0 Then GoTo 930
+870 INPUT ""; userKeyPressed$
+880 IR12 = (userKeyPressed$ = "Yuri")
+890 IR14 = ((userKeyPressed$ = "yuri") Or (userKeyPressed$ = "Yuri"))
+900 If ((userKeyPressed$ = "YURI") Or (IR14)) = 0 Then GoTo 930
 
 910 Subroutine S920
 920 GoTo 940
@@ -161,30 +161,30 @@ Rem error 17 (2 )
 1470 Print "--ROB KREUZER--"
 1480 Print "--Jon Kreuzer--"
 1490 Print "Hit a key to continue!"
-1500 L22$ = INKEY$
-1510 If L22$ <> "" Then GoTo 1530
+1500 userKeyPressed$ = INKEY$
+1510 If userKeyPressed$ <> "" Then GoTo 1530
 1520 GoTo 1500
 1530 System
 1540 DRAW "bm153,104"
 1550 DRAW "c3bl5nl10br5bd4nd9bu4br5nr10bl5c1bu5nu9bd5"
-1560 L22$ = INKEY$
+1560 userKeyPressed$ = INKEY$
 1570 GOSUB S11860
-1580 If L22$ <> "" Then GoTo 1600
+1580 If userKeyPressed$ <> "" Then GoTo 1600
 1590 GoTo 1560
 1600 DRAW "c2bl5nl10br5bd4nd9bu4br5nr10bl5bu5nu9bd5"
-1610 If L22$ <> "6" Then GoTo 1650
+1610 If userKeyPressed$ <> "6" Then GoTo 1650
 1620 GOSUB S1760
 1630 DRAW "ta=" + VarPtr$(I107$)
 1640 GoTo 1550
-1650 If L22$ <> "4" Then GoTo 1690
+1650 If userKeyPressed$ <> "4" Then GoTo 1690
 1660 GOSUB S2030
 1670 DRAW "ta=" + VarPtr$(I107$)
 1680 GoTo 1550
 1690 If ((L112 = 1) And ((L111 = 1) And (L110 = 1))) = 0 Then GoTo 1720
 1700 SOUND L113, 0.5
 1710 I114 = 1
-1720 IR12 = (L22$ = "x")
-1730 If ((L22$ = "g") Or (L22$ = "x")) = 0 Then GoTo 1750
+1720 IR12 = (userKeyPressed$ = "x")
+1730 If ((userKeyPressed$ = "g") Or (userKeyPressed$ = "x")) = 0 Then GoTo 1750
 
 1740 Subroutine S1750
 1750 GoTo 1560
@@ -500,29 +500,29 @@ Rem error 17 (2 )
 4830 GOSUB S14720
 4840 LOCATE 25, 1
 4850 Print "r=restore,s=save,q=quit,x=exit inventory";
-4860 L22$ = INKEY$
+4860 userKeyPressed$ = INKEY$
 4870 GOSUB S11860
-4880 If L22$ <> "" Then GoTo 4900
+4880 If userKeyPressed$ <> "" Then GoTo 4900
 4890 GoTo 4860
-4900 If L22$ <> "r" Then GoTo 4940
+4900 If userKeyPressed$ <> "r" Then GoTo 4940
 4910 GOSUB S5650
-4920 L22$ = "x"
+4920 userKeyPressed$ = "x"
 4930 GoTo 4960
-4940 If L22$ <> "q" Then GoTo 4960
+4940 If userKeyPressed$ <> "q" Then GoTo 4960
 4950 GOSUB S5970
-4960 If L22$ <> "s" Then GoTo 4990
+4960 If userKeyPressed$ <> "s" Then GoTo 4990
 4970 GOSUB S5830
-4980 L22$ = "x"
-4990 If L22$ <> "u" Then GoTo 5010
+4980 userKeyPressed$ = "x"
+4990 If userKeyPressed$ <> "u" Then GoTo 5010
 5000 GOSUB S12600
-5010 If L22$ <> "a" Then GoTo 5030
+5010 If userKeyPressed$ <> "a" Then GoTo 5030
 5020 GOSUB S14940
 5030 If L270$ <> "y" Then GoTo 5060
 5040 L270$ = ""
 5050 GoTo 2440
 5060 GOSUB S11590
-5070 IR12 = (L22$ <> "x")
-5080 If ((L22$ <> "g") And IR12) = 0 Then GoTo 5100
+5070 IR12 = (userKeyPressed$ <> "x")
+5080 If ((userKeyPressed$ <> "g") And IR12) = 0 Then GoTo 5100
 5090 GoTo 4860
 5100 If I272 <> 1 Then GoTo 5120
 5110 L137 = Timer - L138
@@ -530,7 +530,7 @@ Rem error 17 (2 )
 5130 GoTo 14570
 5140 GOSUB S7860
 5150 If L274$ = "y" Then GoTo 5190
-5160 L22$ = L275$
+5160 userKeyPressed$ = L275$
 5170 L275$ = ""
 5180 GOSUB S9230
 5190 If I272 <> 1 Then GoTo 5210
@@ -591,7 +591,7 @@ Rem error 17 (2 )
 5690 If ((L294 > 4) Or (L294 < 0#)) = 0 Then GoTo 5710
 5700 GoTo 5650
 5710 Open "saver" + Chr$(L294 + 97) + ".pac" For Input As #1
-5720 Input #1, L36$, L144, gameTime, L270$, L274$, L22$, L275$
+5720 Input #1, L36$, L144, gameTime, L270$, L274$, userKeyPressed$, L275$
 5730 For I14 = 1 To 65
 5740   Input #1, I300(I14)
 5750 Next
@@ -610,7 +610,7 @@ Rem error 17 (2 )
 5870 If ((L294 > 4) Or (L294 < 0#)) = 0 Then GoTo 5890
 5880 GoTo 5830
 5890 Open "saver" + Chr$(L294 + 97) + ".pac" For Output As #1
-5900 Write #1, L36$, L144, gameTime, L270$, L274$, L22$, L275$
+5900 Write #1, L36$, L144, gameTime, L270$, L274$, userKeyPressed$, L275$
 5910 For I14 = 1 To 65
 5920   Write #1, I300(I14)
 5930 Next
@@ -620,11 +620,11 @@ Rem error 17 (2 )
 5960 Subroutine S5970
 5970 LOCATE 1, 1
 5980 Print "Do you really want to quit?"
-5990 L22$ = INKEY$
-6000 If L22$ <> "" Then GoTo 6020
+5990 userKeyPressed$ = INKEY$
+6000 If userKeyPressed$ <> "" Then GoTo 6020
 6010 GoTo 5990
-6020 IR12 = (L22$ = "y")
-6030 If ((L22$ = "y") Or (L22$ = "y")) = 0 Then GoTo 6050
+6020 IR12 = (userKeyPressed$ = "y")
+6030 If ((userKeyPressed$ = "y") Or (userKeyPressed$ = "y")) = 0 Then GoTo 6050
 6040 System
 
 6050 Subroutine S6060
@@ -642,7 +642,7 @@ Rem error 17 (2 )
 6160 Subroutine S6170
 6170 I313 = I14
 6180 I14 = Round(L314(I14))
-6190 If L315$(I14) <> L22$ Then GoTo 6210
+6190 If L315$(I14) <> userKeyPressed$ Then GoTo 6210
 6200 GoTo 6230
 6210 I14 = I313
 6220 GoTo 6130
@@ -659,9 +659,9 @@ Rem error 17 (2 )
 6330 GoTo 6130
 6340 I300(Round(L319(I14))) = 1
 6350 IR12 = (L319(I14) <> 0#)
-6360 If ((L22$ = "g") And IR12) = 0 Then GoTo 6380
+6360 If ((userKeyPressed$ = "g") And IR12) = 0 Then GoTo 6380
 6370 GOSUB S5220
-6380 If L22$ <> "u" Then GoTo 6400
+6380 If userKeyPressed$ <> "u" Then GoTo 6400
 6390 GOSUB S5330
 6400 LOCATE 1, 1
 6410 Print "                                                                               "
@@ -676,26 +676,26 @@ Rem error 17 (2 )
 6500 GoTo 6710
 6510 If Right$(L323$(I14), 1) <> "s" Then GoTo 6560
 6520 I327 = I14
-6530 L22$ = "1"
+6530 userKeyPressed$ = "1"
 6540 GOSUB S8130
 6550 I14 = I327
 6560 If Right$(L323$(I14), 1) <> "n" Then GoTo 6610
 6570 I327 = I14
-6580 L22$ = "2"
+6580 userKeyPressed$ = "2"
 6590 GOSUB S8130
 6600 I14 = I327
 6610 If Right$(L323$(I14), 1) <> "e" Then GoTo 6660
 6620 I327 = I14
-6630 L22$ = "3"
+6630 userKeyPressed$ = "3"
 6640 GOSUB S8130
 6650 I14 = I327
 6660 If Right$(L323$(I14), 1) <> "w" Then GoTo 6710
 6670 I327 = I14
-6680 L22$ = "4"
+6680 userKeyPressed$ = "4"
 6690 GOSUB S8130
 6700 I14 = I327
 6710 If Left$(L323$(I14), 1) <> "f" Then GoTo 6740
-6720 L22$ = Right$(L323$(I14), 1)
+6720 userKeyPressed$ = Right$(L323$(I14), 1)
 6730 GOSUB S9230
 6740 If ((L319(I14) = 47) Or (L319(I14) = 41)) = 0 Then GoTo 6760
 6750 GOSUB S5410
@@ -722,7 +722,7 @@ Rem error 17 (2 )
 6940 L348$ = ""
 6950 IR12 = (L325$ = "z")
 6960 If ((L274$ = "y") And IR12) = 0 Then GoTo 7010
-6970 L22$ = L275$
+6970 userKeyPressed$ = L275$
 6980 L275$ = ""
 6990 GOSUB S9230
 7000 L274$ = "n"
@@ -746,7 +746,7 @@ Rem error 17 (2 )
 7170 GOSUB S6880
 7180 DEF SEG = 0
 7190 POKE L355, 32
-7200 L22$ = INKEY$
+7200 userKeyPressed$ = INKEY$
 7210 GOSUB S11860
 7220 If ((I358 = 1) And (L357$ = "")) = 0 Then GoTo 7250
 7230 I359 = Round(L144)
@@ -754,27 +754,27 @@ Rem error 17 (2 )
 7250 IR12 = ((I359 + 120) < L144)
 7260 If ((L357$ = "y") And IR12) = 0 Then GoTo 7280
 7270 GoTo 15130
-7280 If L22$ <> "" Then GoTo 7300
+7280 If userKeyPressed$ <> "" Then GoTo 7300
 7290 GoTo 7180
 7300 PUT (I24,cursorX),L33,XOR
-7310 If L22$ <> "8" Then GoTo 7330
+7310 If userKeyPressed$ <> "8" Then GoTo 7330
 7320 cursorX = cursorX - 4
-7330 If L22$ <> "2" Then GoTo 7350
+7330 If userKeyPressed$ <> "2" Then GoTo 7350
 7340 cursorX = cursorX + 4
-7350 If L22$ <> "6" Then GoTo 7370
+7350 If userKeyPressed$ <> "6" Then GoTo 7370
 7360 I24 = I24 + 4
-7370 If L22$ <> "4" Then GoTo 7390
+7370 If userKeyPressed$ <> "4" Then GoTo 7390
 7380 I24 = I24 - 4
-7390 If L22$ <> "7" Then GoTo 7420
+7390 If userKeyPressed$ <> "7" Then GoTo 7420
 7400 I24 = I24 - 4
 7410 cursorX = cursorX - 4
-7420 If L22$ <> "1" Then GoTo 7450
+7420 If userKeyPressed$ <> "1" Then GoTo 7450
 7430 I24 = I24 - 4
 7440 cursorX = cursorX + 4
-7450 If L22$ <> "3" Then GoTo 7480
+7450 If userKeyPressed$ <> "3" Then GoTo 7480
 7460 I24 = I24 + 4
 7470 cursorX = cursorX + 4
-7480 If L22$ <> "9" Then GoTo 7510
+7480 If userKeyPressed$ <> "9" Then GoTo 7510
 7490 I24 = I24 + 4
 7500 cursorX = cursorX - 4
 7510 If I24 >= 0 Then GoTo 7540
@@ -787,15 +787,15 @@ Rem error 17 (2 )
 7580 GoTo 7610
 7590 If cursorX <= 195 Then GoTo 7610
 7600 cursorX = cursorX - 4
-7610 If L22$ <> "i" Then GoTo 7630
+7610 If userKeyPressed$ <> "i" Then GoTo 7630
 7620 GOSUB S2440
 7630 If I272 <> 1 Then GoTo 7660
 7640 GOSUB S14330
 7650 GoTo 7050
-7660 IR12 = (L22$ = "l")
-7670 IR14 = ((L22$ = "g") Or (L22$ = "l"))
-7680 IR16 = ((L22$ = "u") Or (IR14))
-7690 If ((L22$ = "a") Or (IR16)) = 0 Then GoTo 7730
+7660 IR12 = (userKeyPressed$ = "l")
+7670 IR14 = ((userKeyPressed$ = "g") Or (userKeyPressed$ = "l"))
+7680 IR16 = ((userKeyPressed$ = "u") Or (IR14))
+7690 If ((userKeyPressed$ = "a") Or (IR16)) = 0 Then GoTo 7730
 7700 GOSUB S6060
 7710 GOSUB S10820
 7720 GOSUB S13930
@@ -845,8 +845,8 @@ Rem error 17 (2 )
 8150 GET (100,100)-(130,130),L33
 8160 Close
 8170 LOCATE 1, 1
-8180 INPUT ""; L22$
-8190 Open L22$ + ".pct" For Output As #1
+8180 INPUT ""; userKeyPressed$
+8190 Open userKeyPressed$ + ".pct" For Output As #1
 8200 For I14 = 0 To 125 Step 10
 8210   Write #1, I386(I14), L387(I14), L388(I14), L389(I14), L390(I14), L391(I14), L392(I14), L393(I14), L394(I14), L395(I14)
 8220 Next
@@ -854,13 +854,13 @@ Rem error 17 (2 )
 8240 Close
 8250 Palette 2, 1
 8260 Palette 1, 8
-8270 If L22$ <> "1" Then GoTo 8290
+8270 If userKeyPressed$ <> "1" Then GoTo 8290
 8280 L36$ = "joew1"
-8290 If L22$ <> "2" Then GoTo 8310
+8290 If userKeyPressed$ <> "2" Then GoTo 8310
 8300 L36$ = "joew2"
-8310 If L22$ <> "3" Then GoTo 8330
+8310 If userKeyPressed$ <> "3" Then GoTo 8330
 8320 L36$ = "joew3"
-8330 If L22$ <> "4" Then GoTo 8350
+8330 If userKeyPressed$ <> "4" Then GoTo 8350
 8340 L36$ = "joew4"
 8350 Open L36$ + ".pct" For Input As #1
 8360 GET (1,8)-(9,18),L278
@@ -869,20 +869,20 @@ Rem error 17 (2 )
 8390   IR12 = (I14 * 2)
 8400   Input #1, I404(I14), L405(IR12)
 8410 Next
-8420 L406$ = L22$
-8430 L22$ = ""
+8420 L406$ = userKeyPressed$
+8430 userKeyPressed$ = ""
 8440 GOSUB S9230
-8450 L22$ = L406$
-8460 If L22$ <> "1" Then GoTo 8490
+8450 userKeyPressed$ = L406$
+8460 If userKeyPressed$ <> "1" Then GoTo 8490
 8470 GoTo 8570
 8480 GoTo 8570
-8490 If L22$ <> "2" Then GoTo 8520
+8490 If userKeyPressed$ <> "2" Then GoTo 8520
 8500 GoTo 8730
 8510 GoTo 8570
-8520 If L22$ <> "3" Then GoTo 8550
+8520 If userKeyPressed$ <> "3" Then GoTo 8550
 8530 GoTo 8900
 8540 GoTo 8570
-8550 If L22$ <> "4" Then GoTo 8570
+8550 If userKeyPressed$ <> "4" Then GoTo 8570
 8560 GoTo 9060
 8570 For I14 = 130 To 150 Step 2
 8580   PUT (140,I14),L278,XOR
@@ -970,23 +970,23 @@ Rem error 17 (2 )
 9360 PUT (140,130),L427,XOR
 9370 If L275$ <> "3" Then GoTo 9390
 9380 PUT (140,130),L429,XOR
-9390 If L22$ <> "4" Then GoTo 9410
+9390 If userKeyPressed$ <> "4" Then GoTo 9410
 9400 PUT (140,130),L415,XOR
-9410 If L22$ <> "2" Then GoTo 9430
+9410 If userKeyPressed$ <> "2" Then GoTo 9430
 9420 PUT (140,130),L417,XOR
-9430 If L22$ <> "6" Then GoTo 9450
+9430 If userKeyPressed$ <> "6" Then GoTo 9450
 9440 PUT (140,130),L419,XOR
-9450 If L22$ <> "8" Then GoTo 9470
+9450 If userKeyPressed$ <> "8" Then GoTo 9470
 9460 PUT (140,130),L421,XOR
-9470 If L22$ <> "1" Then GoTo 9490
+9470 If userKeyPressed$ <> "1" Then GoTo 9490
 9480 PUT (140,130),L423,XOR
-9490 If L22$ <> "7" Then GoTo 9510
+9490 If userKeyPressed$ <> "7" Then GoTo 9510
 9500 PUT (140,130),L425,XOR
-9510 If L22$ <> "9" Then GoTo 9530
+9510 If userKeyPressed$ <> "9" Then GoTo 9530
 9520 PUT (140,130),L427,XOR
-9530 If L22$ <> "3" Then GoTo 9550
+9530 If userKeyPressed$ <> "3" Then GoTo 9550
 9540 PUT (140,130),L429,XOR
-9550 L275$ = L22$
+9550 L275$ = userKeyPressed$
 
 9560 Subroutine S9570
 9570 GET (1,1)-(3,18),L421
@@ -1008,21 +1008,21 @@ Rem error 17 (2 )
 9720 I440 = L439 - I24
 9730 I442 = L441 - cursorX
 9740 If ((I442 > I440) And ((I442 < I440) And (I442 > 0))) = 0 Then GoTo 9760
-9750 L22$ = "1"
+9750 userKeyPressed$ = "1"
 9760 If ((I442 > I440) And ((I442 < I440) And (I442 > 0))) = 0 Then GoTo 9780
-9770 L22$ = "2"
+9770 userKeyPressed$ = "2"
 9780 If ((I442 > I440) And ((I442 < I440) And (I442 > 0))) = 0 Then GoTo 9800
-9790 L22$ = "3"
+9790 userKeyPressed$ = "3"
 9800 If ((I442 > I440) And ((I442 < I440) And (I442 > 0))) = 0 Then GoTo 9820
-9810 L22$ = "6"
+9810 userKeyPressed$ = "6"
 9820 If ((I442 > I440) And ((I442 < I440) And (I442 > 0))) = 0 Then GoTo 9840
-9830 L22$ = "9"
+9830 userKeyPressed$ = "9"
 9840 If ((I442 > I440) And ((I442 < I440) And (I442 > 0))) = 0 Then GoTo 9860
-9850 L22$ = "8"
+9850 userKeyPressed$ = "8"
 9860 If ((I442 > I440) And ((I442 < I440) And (I442 > 0))) = 0 Then GoTo 9880
-9870 L22$ = "7"
+9870 userKeyPressed$ = "7"
 9880 If ((I442 > I440) And ((I442 < I440) And (I442 > 0))) = 0 Then GoTo 9900
-9890 L22$ = "4"
+9890 userKeyPressed$ = "4"
 
 9900 Subroutine S9910
 9910 Close
@@ -1202,13 +1202,13 @@ Rem error 17 (2 )
 11580 Subroutine S11590
 11590 LOCATE I186, I188 - 1
 11600 Print " "
-11610 If L22$ <> "2" Then GoTo 11640
+11610 If userKeyPressed$ <> "2" Then GoTo 11640
 11620 I186 = I186 + 1
 11630 GoTo 11650
 11640 GoTo 11670
 11650 If I192((I186 + 1) + (L191 * I188)) <> 0 Then GoTo 11670
 11660 I186 = I186 - 1
-11670 If L22$ <> "8" Then GoTo 11750
+11670 If userKeyPressed$ <> "8" Then GoTo 11750
 11680 I186 = I186 - 1
 11690 If I186 >= 6 Then GoTo 11750
 11700 I186 = 6
@@ -1218,10 +1218,10 @@ Rem error 17 (2 )
 11740 I188 = 2
 11750 LOCATE I186, I188 - 1
 11760 Print Chr$(26)
-11770 If ((I192((I186 + 1) + (L191 * I188)) <> I317) And (L22$ = "6")) = 0 Then GoTo 11800
+11770 If ((I192((I186 + 1) + (L191 * I188)) <> I317) And (userKeyPressed$ = "6")) = 0 Then GoTo 11800
 11780 I317 = I192((I186 + 1) + (L191 * I188))
 11790 PLAY "a50b50e-30"
-11800 If L22$ <> "l" Then GoTo 11850
+11800 If userKeyPressed$ <> "l" Then GoTo 11850
 11810 LOCATE 1, 1
 11820 Print "                                                                              "
 11830 LOCATE 1, 1
@@ -1234,31 +1234,31 @@ Rem error 17 (2 )
 
 11890 Subroutine S11900
 11900 If I477 >= 40 Then GoTo 11920
-11910 L22$ = "4"
+11910 userKeyPressed$ = "4"
 11920 If I477 <= 120 Then GoTo 11940
-11930 L22$ = "6"
+11930 userKeyPressed$ = "6"
 11940 If L478 >= 40 Then GoTo 11960
-11950 L22$ = "8"
+11950 userKeyPressed$ = "8"
 11960 If L478 <= 120 Then GoTo 11980
-11970 L22$ = "2"
+11970 userKeyPressed$ = "2"
 11980 If ((L478 < 40) And (I477 > 120)) = 0 Then GoTo 12000
-11990 L22$ = "9"
+11990 userKeyPressed$ = "9"
 12000 If ((L478 < 40) And (I477 < 40)) = 0 Then GoTo 12020
-12010 L22$ = "7"
+12010 userKeyPressed$ = "7"
 12020 If ((I477 > 120) And (L478 > 120)) = 0 Then GoTo 12040
-12030 L22$ = "3"
+12030 userKeyPressed$ = "3"
 12040 If ((I477 < 40) And (L478 > 120)) = 0 Then GoTo 12060
-12050 L22$ = "1"
-12060 IR12 = (L22$ = "1")
-12070 IR14 = ((L22$ = "2") Or (L22$ = "1"))
-12080 IR16 = ((L22$ = "3") Or (IR14))
-12090 IR18 = ((L22$ = "4") Or (IR16))
-12100 IR20 = ((L22$ = "5") Or (IR18))
-12110 IR22 = ((L22$ = "6") Or (IR20))
-12120 IR24 = ((L22$ = "7") Or (IR22))
-12130 IR26 = ((L22$ = "8") Or (IR24))
-12140 If ((L22$ = "9") Or (IR26)) = 0 Then GoTo 12160
-12150 L482$ = ""
+12050 userKeyPressed$ = "1"
+12060 IR12 = (userKeyPressed$ = "1")
+12070 IR14 = ((userKeyPressed$ = "2") Or (userKeyPressed$ = "1"))
+12080 IR16 = ((userKeyPressed$ = "3") Or (IR14))
+12090 IR18 = ((userKeyPressed$ = "4") Or (IR16))
+12100 IR20 = ((userKeyPressed$ = "5") Or (IR18))
+12110 IR22 = ((userKeyPressed$ = "6") Or (IR20))
+12120 IR24 = ((userKeyPressed$ = "7") Or (IR22))
+12130 IR26 = ((userKeyPressed$ = "8") Or (IR24))
+12140 If ((userKeyPressed$ = "9") Or (IR26)) = 0 Then GoTo 12160
+12150 buttonPressed$ = ""
 
 12160 Subroutine S12170
 12170 STRIG(0) ON
@@ -1267,35 +1267,38 @@ Rem error 17 (2 )
 12200 STRIG(6) ON
 
 12210 Subroutine S12220
-12220 If L482$ <> "l" Then GoTo 12250
+12220 If buttonPressed$ <> "l" Then GoTo 12250
+
 12230 Subroutine S12240
 12240 GoTo 12280
-12250 L22$ = "l"
-12260 L482$ = "l"
+
+12250 userKeyPressed$ = "l"
+12260 buttonPressed$ = "l"
 
 ' Subroutine S12280
-12280 If L482$ <> "a" Then GoTo 12310
+12280 If buttonPressed$ <> "a" Then GoTo 12310
 
 12290 Subroutine S12300
 12300 GoTo 12340
-12310 L22$ = "a"
-12320 L482$ = "a"
+
+12310 userKeyPressed$ = "a"
+12320 buttonPressed$ = "a"
 
 12330 Subroutine S12340
-12340 If L482$ <> "g" Then GoTo 12370
+12340 If buttonPressed$ <> "g" Then GoTo 12370
 
 12350 Subroutine S12360
 12360 GoTo 12400
-12370 L22$ = "g"
-12380 L482$ = "g"
+12370 userKeyPressed$ = "g"
+12380 buttonPressed$ = "g"
 
 12390 Subroutine S12400
-12400 If L482$ <> "u" Then GoTo 12430
+12400 If buttonPressed$ <> "u" Then GoTo 12430
 
 12410 Subroutine S12420
 12420 GoTo 12460
-12430 L22$ = "u"
-12440 L482$ = "u"
+12430 userKeyPressed$ = "u"
+12440 buttonPressed$ = "u"
 
 12450 Subroutine S12460
 
@@ -1382,8 +1385,8 @@ Rem error 18 ()
 13210 Print "safer to leave them on it  "
 13220 Print "permantly so they do not   "
 13230 Print "overthrow the doctors.     "
-13240 L22$ = INKEY$
-13250 If L22$ <> "" Then GoTo 13270
+13240 userKeyPressed$ = INKEY$
+13250 If userKeyPressed$ <> "" Then GoTo 13270
 13260 GoTo 13240
 
 13270 Subroutine S13270
@@ -1395,8 +1398,8 @@ Rem error 18 ()
 13330 Print "in the headboard of my bed not even  "
 13340 Print "the servants know about it.Time is the"
 13350 Print "barrier to the place of the damned."
-13360 L22$ = INKEY$
-13370 If L22$ <> "" Then GoTo 13390
+13360 userKeyPressed$ = INKEY$
+13370 If userKeyPressed$ <> "" Then GoTo 13390
 13380 GoTo 13360
 
 13390 Subroutine S13400
@@ -1471,8 +1474,8 @@ Rem error 18 ()
 14060 Palette 2, 7
 14070 Palette 3, 11
 14080 Key OFF
-14090 L22$ = INKEY$
-14100 If L22$ <> "" Then GoTo 14120
+14090 userKeyPressed$ = INKEY$
+14100 If userKeyPressed$ <> "" Then GoTo 14120
 14110 GoTo 14090
 Rem error 41 ()
 14120 GOTO ????'????
@@ -1498,15 +1501,15 @@ Rem error 41 ()
 14310 Print Erl
 14320 System
 14330 IR12 = (I317 = 35)
-14340 If ((L22$ = "u") And IR12) = 0 Then GoTo 14360
+14340 If ((userKeyPressed$ = "u") And IR12) = 0 Then GoTo 14360
 14350 GoTo 14460
-14360 If L22$ <> "u" Then GoTo 14390
+14360 If userKeyPressed$ <> "u" Then GoTo 14390
 14370 LOCATE 1, 1
 14380 Print "He sees what your trying do!                "
-14390 If L22$ <> "a" Then GoTo 14420
+14390 If userKeyPressed$ <> "a" Then GoTo 14420
 14400 LOCATE 1, 1
 14410 Print "Your no match for him in fair combat!       "
-14420 If L22$ <> "l" Then GoTo 14450
+14420 If userKeyPressed$ <> "l" Then GoTo 14450
 14430 LOCATE 1, 1
 14440 Print "The mental patient is preparing to kill you!"
 
@@ -1519,7 +1522,7 @@ Rem error 41 ()
 14510 I272 = 2
 14520 LOCATE 1, 1
 14530 Print "You quickly inject him and he crumbles into a distorted heap. "
-14540 L22$ = "n"
+14540 userKeyPressed$ = "n"
 14550 PUT (135,135),L278,XOR
 
 14560 Subroutine S14570
@@ -1529,8 +1532,8 @@ Rem error 41 ()
 14600 If (Timer - L137) <= XYZ Then GoTo 14620
 14610 GoTo 14630
 14620 GoTo 14600
-14630 L22$ = INKEY$
-14640 If L22$ <> "" Then GoTo 14660
+14630 userKeyPressed$ = INKEY$
+14640 If userKeyPressed$ <> "" Then GoTo 14660
 14650 GoTo 14630
 14660 If L36$ <> "dindead" Then GoTo 14700
 14670 L36$ = "death"
@@ -1575,8 +1578,8 @@ Rem error 41 ()
 15040 Palette 2, 4
 15050 Palette 3, 8
 15060 Key OFF
-15070 L22$ = INKEY$
-15080 If L22$ <> "" Then GoTo 15100
+15070 userKeyPressed$ = INKEY$
+15080 If userKeyPressed$ <> "" Then GoTo 15100
 15090 GoTo 15070
 15100 L270$ = "y"
 15110 Palette 3, 6
@@ -1596,8 +1599,8 @@ Rem error 41 ()
 15240   For I408 = 1 To 10
 15250     SOUND 32676, 0.1
 15260   Next
-15270   L22$ = INKEY$
-15280   If L22$ = "" Then GoTo 15300
+15270   userKeyPressed$ = INKEY$
+15280   If userKeyPressed$ = "" Then GoTo 15300
 Rem error 41 ()
 15290   GOTO ????'????
 15300   I14 = 1
@@ -1981,7 +1984,7 @@ cleanupAndEnd Erase R28
 18680 End
 'Symbol Address  Symbol Address  Symbol Address  Symbol Address
 'startTime     0036 E   L10    10A3     I14    2958 IE  I15    0CE6 IA
-'L16    0DEC A   L17    0EF2 A   L18    0FF8 A   L22$   2EAE S
+'L16    0DEC A   L17    0EF2 A   L18    0FF8 A   userKeyPressed$   2EAE S
 'I24    2EB2 IE  cursorX    2EB4 IE  L30    03DE     L33    2FF4 EA
 'L36$   2EE0 S   L39    0050     L81    0384     L87    0032
 'L88    01F4     L95    0064     L105   0BCC     I107$  2EE4 SIE
@@ -2027,7 +2030,7 @@ cleanupAndEnd Erase R28
 'I451   29AE IE  L452   00AF     L453   006D     L455   401E EA
 'L457   4030 EA  L459   4042 EA  L461   4054 EA  L466   0041
 'L467   004A     L468   0058     I471   29A4 IE  L476$  27BC SA
-'I477   2F5C IE  L478   2F5E E   L482$  2F62 S   I566   2F66 IE
+'I477   2F5C IE  L478   2F5E E   buttonPressed$  2F62 S   I566   2F66 IE
 'I567   2F68 IE  I574   2F6A IE  L579   2F6C E   L586   0258
 'L587   0101     L612   00D4     L613   0106     L614   00A0
 'L615   00D3     L616   0094     L617   0109     L623   005E
@@ -2066,7 +2069,7 @@ cleanupAndEnd Erase R28
 'I252   29A0 IE  I139   29A2 IE  I471   29A4 IE  I451   29AE IE
 'I358   29B0 I   I114   29B4 IE  I250   29BC I   L261   29BD
 'I449   29BE I   L312   29F2 A   L311   2B86 A   L265   2BC5
-'L314   2D1A A   L263   2D72     L367   2E10     L22$   2EAE S
+'L314   2D1A A   L263   2D72     L367   2E10     userKeyPressed$   2EAE S
 'I24    2EB2 IE  cursorX    2EB4 IE  I386   2EB6 IA  L387   2EB8 A
 'L388   2EBA A   L389   2EBC A   L390   2EBE A   L391   2EC0 A
 'L392   2EC2 A   L393   2EC4 A   L394   2EC6 A   L395   2EC8 A
@@ -2081,7 +2084,7 @@ cleanupAndEnd Erase R28
 'L357$  2F3E S   I359   2F42 IE  L370   2F44     L371   2F46
 'I375   2F48 I   I376   2F4A I   I377   2F4C I   L406$  2F4E S
 'I408   2F52 I   I440   2F54 IE  I442   2F56 IE  L448$  2F58 S
-'I477   2F5C IE  L478   2F5E E   L482$  2F62 S   I566   2F66 IE
+'I477   2F5C IE  L478   2F5E E   buttonPressed$  2F62 S   I566   2F66 IE
 'I567   2F68 IE  I574   2F6A IE  L579   2F6C E   L33    2FF4 EA
 'L278   3C08 EA  L301   3C6A A   L403   3F46 EA  L415   3F60 EA
 'L417   3F72 EA  L419   3F84 EA  L421   3F96 EA  L423   3FA8 EA
