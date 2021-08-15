@@ -33,15 +33,18 @@ COMMON SHARED L623,L628,L629,L630,L631,L632,L633,L634
 120 Call S16760
 130 Key OFF
 140 startTime = Timer
-' register joystick key press handlers.
-150 On STRIG(2) GOSUB S12280 ' joystick: Lower trigger, joystick B
+
+' +-----------------+
+' |  JOYSTICk CODE  |
+' +-----------------+
+150 On STRIG(2) GOSUB 12280 ' joystick: Lower trigger, joystick B
 160 On STRIG(0) GOSUB S12220 ' joystick: Lower trigger, joystick A
 170 On STRIG(4) GOSUB S12340 ' joystick: Upper trigger, joystick A
 180 On STRIG(6) GOSUB S12400 ' joystick: Upper trigger, joystick B
+190 GOSUB SWITCH_JOYSTICK_ON
 
-190 GOSUB S12170
 200 GOSUB S12510
-210 On Error GoTo 2280
+210 On Error GoTo EXIT_ON_ERROR
 Rem error 17 (2 )
 220 Screen 1
 230 Cls
@@ -254,27 +257,25 @@ Rem error 17 (2 )
 2250 If (I107$ / 10) <> 0# Then GoTo 2270
 2260 SOUND L95, 0.1
 
-2270 Subroutine S2280
-2280 SWAP TIMER,'Might be BEEP instead!
-2290 Cls
-2300 LOCATE 5, 12
-2310 Print "There has been"
-2320 LOCATE 8, 15
-2330 Print "an error!"
-2340 LOCATE 15, 10
-2350 Print "Program terminated!"
-2360 SOUND 32676, 20
-2370 SOUND L95, 0.1
-2380 For I14 = 1000 To 50 Step -15
-2390   SOUND I14, 0.2
-2400   SOUND L113, 0.1
-2410   SOUND I14 * 2, 0.05
-2420 Next
-2430 System
+EXIT_ON_ERROR:
+  BEEP
+  Cls
+  LOCATE 5, 12:  PRINT "There has been" 
+  LOCATE 8, 15:  PRINT "an error!"
+  LOCATE 15, 10: PRINT "Program terminated!"
+  SOUND 32676, 20
+  SOUND L95, 0.1
+  For i = 1000 To 50 Step -15
+    SOUND i, 0.2
+    SOUND L113, 0.1
+    SOUND i * 2, 0.05
+  Next i
+  System
+
 2440 Cls
 2450 L138 = Timer - L137
 2460 If ((I140 = 1) And (I139 = 1)) = 0 Then GoTo 2480
-2470 I141 = 1
+2470 I141 = 1 
 2480 L142$ = ""
 2490 If (L144 * L143) <= L145 Then GoTo 2530
 2500 L146 = 9
@@ -641,7 +642,8 @@ Rem error 17 (2 )
 6040 System
 
 6050 Subroutine S6060
-6060 GOSUB S12460
+6060 GOSUB 12460
+
 6070 LOCATE 1, 1
 6080 Print "                                                                               "
 6090 L144 = L144 + 8
@@ -1215,13 +1217,13 @@ Rem error 17 (2 )
 11580 Subroutine S11590
 11590 LOCATE I186, I188 - 1
 11600 Print " "
-11610 If userKeyPressed$ <> "2" Then GoTo 11640
+11610 If keyPressed$ <> "2" Then GoTo 11640
 11620 I186 = I186 + 1
 11630 GoTo 11650
 11640 GoTo 11670
 11650 If I192((I186 + 1) + (L191 * I188)) <> 0 Then GoTo 11670
 11660 I186 = I186 - 1
-11670 If userKeyPressed$ <> "8" Then GoTo 11750
+11670 If keyPressed$ <> "8" Then GoTo 11750
 11680 I186 = I186 - 1
 11690 If I186 >= 6 Then GoTo 11750
 11700 I186 = 6
@@ -1231,10 +1233,10 @@ Rem error 17 (2 )
 11740 I188 = 2
 11750 LOCATE I186, I188 - 1
 11760 Print Chr$(26)
-11770 If ((I192((I186 + 1) + (L191 * I188)) <> I317) And (userKeyPressed$ = "6")) = 0 Then GoTo 11800
+11770 If ((I192((I186 + 1) + (L191 * I188)) <> I317) And (keyPressed$ = "6")) = 0 Then GoTo 11800
 11780 I317 = I192((I186 + 1) + (L191 * I188))
 11790 PLAY "a50b50e-30"
-11800 If userKeyPressed$ <> "l" Then GoTo 11850
+11800 If keyPressed$ <> "l" Then GoTo 11850
 11810 LOCATE 1, 1
 11820 Print "                                                                              "
 11830 LOCATE 1, 1
@@ -1273,11 +1275,12 @@ Rem error 17 (2 )
 12140 If ((keyPressed$ = "9") Or (IR26)) = 0 Then GoTo SWITCH_JOYSTICK_ON
 12150 buttonPressed$ = ""
 
-12160 Subroutine S12170
+SWITCH_JOYSTICK_ON:
 12170 STRIG(0) ON
 12180 STRIG(2) ON
 12190 STRIG(4) ON
 12200 STRIG(6) ON
+RETURN
 
 12210 Subroutine S12220
 12220 If buttonPressed$ <> "l" Then GoTo 12250
@@ -1285,24 +1288,25 @@ Rem error 17 (2 )
 12230 Subroutine S12240
 12240 GoTo 12280
 
-12250 userKeyPressed$ = "l"
+12250 keyPressed$ = "l"
 12260 buttonPressed$ = "l"
 
 ' Subroutine S12280
-12280 If buttonPressed$ <> "a" Then GoTo 12310
+  12280 If buttonPressed$ <> "a" Then GoTo 12310
 
-12290 Subroutine S12300
-12300 GoTo 12340
+  12290 Subroutine S12300
+  12300 GoTo 12340
 
-12310 userKeyPressed$ = "a"
-12320 buttonPressed$ = "a"
+  12310 keyPressed$ = "a"
+  12320 buttonPressed$ = "a"
+RETURN
 
-12330 Subroutine S12340
+' Subroutine S12340
 12340 If buttonPressed$ <> "g" Then GoTo 12370
 
 12350 Subroutine S12360
 12360 GoTo 12400
-12370 userKeyPressed$ = "g"
+12370 keyPressed$ = "g"
 12380 buttonPressed$ = "g"
 
 12390 Subroutine S12400
@@ -1310,23 +1314,23 @@ Rem error 17 (2 )
 
 12410 Subroutine S12420
 12420 GoTo 12460
-12430 userKeyPressed$ = "u"
+12430 keyPressed$ = "u"
 12440 buttonPressed$ = "u"
 
-12450 Subroutine S12460
-
 12460 Subroutine S12470
-12470 For I14 = 0 To 6 Step 2
-12480   STRIG(I14) OFF
-12490 Next
+  STRIG(0) OFF
+  STRIG(2) OFF
+  STRIG(4) OFF
+  STRIG(6) OFF
+RETURN
 
 12500 Subroutine S12510
-openIngameItemsFile Close
+12510 Close
 12520 Open "object.pac" For Input As #1
 12530 On Error GoTo 12570
-12540 For I14 = 1 To 50
+12540 For i = 1 To 50
 12550   Input #1, I24, L476$(I24)
-12560 Next
+12560 Next i
 12570 LOCATE 1, 1
 12580 Close
 Rem error 18 ()
@@ -1493,10 +1497,10 @@ Rem error 18 ()
 Rem error 41 ()
 14120 GOTO ????'????
 14130 I566 = 0
-14140 For I14 = 1 To 51
-14150   If I300(I14) <> 1 Then GoTo 14170
+14140 For i = 1 To 51
+14150   If I300(i) <> 1 Then GoTo 14170
 14160   I566 = I566 + 1
-14170 Next
+14170 Next i
 14180 If I139 <> 1 Then GoTo 14200
 14190 I566 = I566 + 2
 14200 If I252 <> 1 Then GoTo 14220
