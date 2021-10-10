@@ -29,13 +29,18 @@ COMMON SHARED L437(),L438(),L439,I440,L441,I442,L444,L445,L448$,I449,I451
 COMMON SHARED L452,L453,L466,L467,L468,I471,L476$(),I477,L478,buttonPressed$,I566
 COMMON SHARED I567,I574,L579,L586,L587,L612,L613,L614,L615,L616,L617
 COMMON SHARED L623,L628,L629,L630,L631,L632,L633,L634
-110 Rem COM() statements in this programme
-120 Call S16760
+
+' +-------------+
+' |  Run Intro  |
+' +-------------+
+
+Call intro
+
 130 Key OFF
 140 startTime = Timer
 
 ' +-----------------+
-' |  JOYSTICk CODE  |
+' |  JOYSTICK CODE  |
 ' +-----------------+
 150 On STRIG(2) GOSUB 12280 ' joystick: Lower trigger, joystick B
 160 On STRIG(0) GOSUB S12220 ' joystick: Lower trigger, joystick A
@@ -1787,9 +1792,9 @@ Rem error 12 (212 )
 16740 End Sub
 16750 GoTo 18680
 
-16760 SUB S16760
-16770 Screen 1
-16780 Randomize 0#
+SUB intro
+  Screen 1
+  Randomize 0#
 16790 Key 16, Chr$(0) + Chr$(1)
 16800 ON KEY(16) GOSUB S????'????
 16810 KEY(16) ON
