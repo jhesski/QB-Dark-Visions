@@ -1,80 +1,142 @@
+DECLARE SUB l_roomsData ()
+DECLARE SUB l_pal (pal_id%)
 DECLARE SUB l_image (filename$)
-'blue = 1: green = 2
-'cyan = 3: red = 4
-'magenta = 5: orange = 6
-'lightGray = 7: gray = 8
-'lightBlue = 9: lightGreen = 10
-'lightCyan = 11: lightOrange = 12
-'lightMagenta = 13: yellow = 14
-'white = 15
-
 DEFINT A-Z
+
+TYPE room
+  id AS INTEGER
+  name AS STRING * 7
+  U AS INTEGER
+  D AS INTEGER
+  L AS INTEGER
+  R AS INTEGER
+  A AS INTEGER
+  pal AS INTEGER
+END TYPE
+
+
 DIM KeyPress AS STRING
-locX = 0
-locY = 0
+DIM SHARED rooms(80) AS room
+DIM curRoom AS INTEGER
+DIM curImg AS STRING
+DIM curPal AS INTEGER
 
-DIM rooms(20, 20) AS STRING
-FOR i = 0 TO 20
-  FOR j = 0 TO 20
-    rooms(i, j) = "NULL"
-  NEXT j
-NEXT i
+curRoom = 0
+curPal = 1
 
+l_roomsData
 
-rooms(0, 0) = "room4.pic"
-rooms(0, 1) = "room3.pic"
-rooms(0, 2) = "room5.pic"
-rooms(1, 1) = "room2.pic"
-rooms(1, 2) = "room1.pic"
+curImg = RTRIM$(rooms(curRoom).name) + ".pic"
+
 
 CLS
 SCREEN 1
-PALETTE 1, 1: PALETTE 2, 8: PALETTE 3, 6
 
-                           
-l_image (rooms(0, 0))
+l_pal (curPal)
+l_image (curImg)
 DO
   KeyPress = UCASE$(INKEY$)
-  IF locY > 0 THEN
-    IF KeyPress = UCASE$("W") AND rooms(locX, locY - 1) <> "NULL" THEN
-      locY = locY - 1
-      l_image (rooms(locX, locY))
-    END IF
-  END IF
 
-  IF KeyPress = UCASE$("S") AND rooms(locX, locY + 1) <> "NULL" AND locY < 20 THEN
-    locY = locY + 1
-    l_image (rooms(locX, locY))
-  END IF
+  SELECT CASE KeyPress
+    CASE IS = "W"
+      IF rooms(curRoom).U <> -1 THEN
+        curRoom = rooms(curRoom).U
+        curImg = RTRIM$(rooms(curRoom).name) + ".pic"
+        IF curPal <> rooms(curRoom).pal THEN curPal = rooms(curRoom).pal: l_pal (curPal)
+        l_image (curImg)
+      END IF
 
-  IF KeyPress = UCASE$("a") AND rooms(locX + 1, locY) <> "NULL" AND locX < 20 THEN
-    locX = locX + 1
-    l_image (rooms(locX, locY))
-  END IF
+    CASE IS = "S"
+      IF rooms(curRoom).D <> -1 THEN
+        curRoom = rooms(curRoom).D
+        curImg = RTRIM$(rooms(curRoom).name) + ".pic"
+        IF curPal <> rooms(curRoom).pal THEN curPal = rooms(curRoom).pal: l_pal (curPal)
+        l_image (curImg)
+      END IF
 
-  IF locX > 0 THEN
-    IF KeyPress = UCASE$("d") AND rooms(locX - 1, locY) <> "NULL" THEN
-      locX = locX - 1
-      l_image (rooms(locX, locY))
-    END IF
-  END IF
-  LOCATE 1, 1: PRINT KeyPress
+    CASE IS = "A"
+        IF rooms(curRoom).L <> -1 THEN
+        curRoom = rooms(curRoom).L
+        curImg = RTRIM$(rooms(curRoom).name) + ".pic"
+        IF curPal <> rooms(curRoom).pal THEN curPal = rooms(curRoom).pal: l_pal (curPal)
+        l_image (curImg)
+      END IF
 
+    CASE IS = "D"
+      IF rooms(curRoom).R <> -1 THEN
+        curRoom = rooms(curRoom).R
+        curImg = RTRIM$(rooms(curRoom).name) + ".pic"
+        IF curPal <> rooms(curRoom).pal THEN curPal = rooms(curRoom).pal: l_pal (curPal)
+        l_image (curImg)
+      END IF
+
+    CASE IS = "L"
+      IF rooms(curRoom).A <> -1 THEN
+        curRoom = rooms(curRoom).A
+        curImg = RTRIM$(rooms(curRoom).name) + ".pic"
+        IF curPal <> rooms(curRoom).pal THEN curPal = rooms(curRoom).pal: l_pal (curPal)
+        l_image (curImg)
+      END IF
+
+
+  END SELECT
+
+  ' LOCATE 1, 1: PRINT KeyPress
 LOOP UNTIL KeyPress = CHR$(27)
-
-
-
-
 
 SYSTEM
 
 SUB l_image (filename$)
   vidSeg = &HA000
-  LOCATE 1, 1: PRINT filename$
   DEF SEG = vidSeg
     BLOAD filename$
   DEF SEG
+END SUB
 
+SUB l_pal (pal_id%)
+  blue = 1: green = 2
+  cyan = 3: red = 4
+  magenta = 5: orange = 6
+  lightGray = 7: gray = 8
+  lightBlue = 9: lightGreen = 10
+  lightCyan = 11: lightOrange = 12
+  lightMagenta = 13: yellow = 14
+  white = 15
+
+  SELECT CASE pal_id%
+    CASE IS = 1
+      PALETTE 1, gray: PALETTE 2, blue: PALETTE 3, orange
+
+    CASE IS = 2
+      PALETTE 1, blue: PALETTE 2, green: PALETTE 3, gray
+
+    CASE IS = 3
+      PALETTE 1, green: PALETTE 2, red: PALETTE 3, gray
+
+    CASE IS = 4
+      PALETTE 1, white: PALETTE 2, red: PALETTE 3, lightMagenta
+
+    CASE IS = 5
+      PALETTE 1, lightMagenta: PALETTE 2, gray: PALETTE 3, orange
+
+    CASE IS = 6
+      PALETTE 1, gray: PALETTE 2, lightGray: PALETTE 3, white
+
+
+
+  END SELECT
+END SUB
+
+SUB l_roomsData ()
+
+  OPEN "rooms.pac" FOR INPUT AS #1
+
+  
+  FOR i = 0 TO 20
+    INPUT #1, rooms(i).id, rooms(i).name, rooms(i).U, rooms(i).D, rooms(i).L, rooms(i).R, rooms(i).A, rooms(i).pal, disc$
+    ON ERROR RESUME NEXT
+  NEXT i
+  CLOSE #1
 
 END SUB
 
