@@ -78,7 +78,6 @@ DO
         l_image (curImg)
       END IF
 
-
   END SELECT
 
   ' LOCATE 1, 1: PRINT KeyPress
@@ -99,7 +98,7 @@ SUB l_pal (pal_id%)
   magenta = 5: orange = 6
   lightGray = 7: gray = 8
   lightBlue = 9: lightGreen = 10
-  lightCyan = 11: lightOrange = 12
+  lightCyan = 11: lightRed = 12
   lightMagenta = 13: yellow = 14
   white = 15
 
@@ -114,23 +113,24 @@ SUB l_pal (pal_id%)
       PALETTE 1, green: PALETTE 2, red: PALETTE 3, gray
 
     CASE IS = 4
-      PALETTE 1, white: PALETTE 2, red: PALETTE 3, lightOrange
+      PALETTE 1, white: PALETTE 2, red: PALETTE 3, lightRed
 
     CASE IS = 5
       PALETTE 1, lightOrange: PALETTE 2, gray: PALETTE 3, orange
 
     CASE IS = 6
       PALETTE 1, gray: PALETTE 2, lightGray: PALETTE 3, white
-
-
-
+    CASE IS = 7
+      PALETTE 1, lightGray: PALETTE 2, magenta: PALETTE 3, orange
+    CASE IS = 8
+      PALETTE 1, lightGray: PALETTE 2, lightRed: PALETTE 3, orange
   END SELECT
+
 END SUB
 
 SUB l_roomsData ()
 
   OPEN "rooms.pac" FOR INPUT AS #1
-
   
   FOR i = 0 TO 20
     INPUT #1, rooms(i).id, rooms(i).name, rooms(i).U, rooms(i).D, rooms(i).L, rooms(i).R, rooms(i).A, rooms(i).pal, disc$
