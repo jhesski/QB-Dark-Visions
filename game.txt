@@ -1794,34 +1794,99 @@ Rem error 12 (212 )
 
 SUB intro
   Screen 1
+  ' SCREEN 1: 320 x 200 graphics,
+  ' 40 x 25 text format, 8 x 8 character box
+  ' 16 background colors and one of two sets of 3 foreground colors assigned using COLOR statement with CGA
+  ' 16 colors assigned to 4 attributes with EGA or VGA
+  
   Randomize 0#
-16790 Key 16, Chr$(0) + Chr$(1)
-16800 ON KEY(16) GOSUB S????'????
-16810 KEY(16) ON
-16820 Palette 3, 6
-16830 Palette 1, 2
-16840 Palette 2, 11
-16850 Key OFF
-16860 Key 16, Chr$(0) + Chr$(1)
-16870 ON KEY(16) GOSUB S????'????
-16880 KEY(16) ON
-16890 Dim R28(1000)
-16900 Dim R46(130)
-16910 Dim R64(130)
-16920 R68 = 133
-16930 GET (20148,20148)-(20156,0),L629
-16940 PUT (8,133),R28,XOR
+  ' n#	A value that sets how RND generates the next random number:
+  
+  Key 16, Chr$(0) + Chr$(1)
+  ' KEY number, CHR$(kbdFlag) + CHR$(scanCode)
+  ' key%	The number of a function key. Use 1 through 10 for function keys F1 through F10. Use 30 and 31 for function keys F11 and F12 on extended keyboards.
+  ' stringexpression$	A string of up to 15 characters that is returned when the function key is pressed.
+  ' CHR$ returns the character corresponding to a specified ASCII code. https://www.qbasic.net/en/reference/general/ascii-table.htm
+  ' ASCII code 0 = key is pressed alone
+  ' ASCII code 1 = ESC   https://www.qbasic.net/en/reference/general/scan-codes.htm
+
+  ' Only key defining may be somewhat complicated, and we'll see it in detail.
+  ' The keys are identified through an order number, from 1 to 25 and 30 to 31
+  ' (these are KEY statement's arbitrary numbers, they are neither scan codes
+  ' nor ASCII codes). The Qbasic predefined keys are:
+
+  '  1 - 10        Function keys F1 to F10
+
+  ' 11 - 14        Arrow keys (up, left, right, down). These arrow
+  '                keys are those in the numerical keyboard keys
+  '                (memories of the past again).
+
+  ' 30 - 31        Function keys F11 and F12
+  
+  ' The keys from 15 to 25 may be defined by the programmer. Therefore we may
+  ' define only 11 keys, and that it isn't too much, as we'll see. The syntax
+  ' is:
+   
+  '             KEY number, CHR$(kbdFlag) + CHR$(scanCode)
+   
+  ' The keyboardFlag indicates if the key that we're defining is combined with
+  ' another one. We must use the following values:
+   
+  '                 0       if the key is pressed alone
+  '               1 to 3    if any Shift and the key are combined
+  '                 4       if Ctrl and the key are combined
+  '                 8       if Alt and the key are combined
+  '                32       if NumLock is activated
+  '                64       if CapsLock is activated
+  '               128       if we are defining some extended key
+   
+  ' Also these values may be combined each other. If we want to detect a
+  ' Ctrl+Alt+key combination, the keyboardFlag must be 4 + 8 = 12.
+
+  ' Other examples:
+  '  - to detect the Intro key pressed alone:  KEY 15, CHR$(0) + CHR$(28)
+  '  - to detect Ctrl+Esc:                     KEY 16, CHR$(4) + CHR$(1)
+  '  - to detect the Alt key pressed alone:    KEY 17, CHR$(0) + CHR$(56)
+
+ON KEY(16) GOSUB S????'????
+' ON KEY branches to a subroutine whenever the key is pressed.
+KEY(16) ON
+' KEY(n%) ON	Enables event trapping for the specified key.
+
+Palette 1, 2   ' Green
+Palette 2, 11  ' Light cyan
+Palette 3, 6   ' Brown
+' PALETTE [attribute%, color&]
+' https://www.qbasic.net/en/reference/general/cokor-values.htm
+
+Key OFF
+' Disables key event trapping
+
+Key 16, Chr$(0) + Chr$(1) 'key 16 = ESC only key pressed
+ON KEY(16) GOSUB S????'????
+KEY(16) ON
+
+Dim R28(1000)
+Dim R46(130)
+Dim R64(130)
+
+R68 = 133
+16930 GET (20148, 20148)-(20156, 0), L629
+16940 PUT (8, 133), R28, XOR
 16950 Line (8, 155)-(105, 145), 3
 16960 Line (75, 175)-(120, 170), 3
+
 16970 For i = 1 To 2
 16980   SOUND 32676, 1
 16990 Next
+
 17000 For IR72 = 8 To 220 Step 4
 17010   R68 = R68 - 0.5
-17020   PUT (IR72,R68),R28,XOR
+17020   PUT (IR72, R68), R28, XOR
 17030   GOSUB S17070
-17040   PUT (IR72,R68),R28,XOR
+17040   PUT (IR72, R68), R28, XOR
 17050 Next
+
 17060 GoTo 17160
 Rem error 12 (50 )
 17070 GoTo 17140 '????
