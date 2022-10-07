@@ -42,11 +42,11 @@ Call intro
 ' +-----------------+
 ' |  JOYSTICK CODE  |
 ' +-----------------+
-150 On STRIG(2) GOSUB 12280 ' joystick: Lower trigger, joystick B
-160 On STRIG(0) GOSUB S12220 ' joystick: Lower trigger, joystick A
-170 On STRIG(4) GOSUB S12340 ' joystick: Upper trigger, joystick A
-180 On STRIG(6) GOSUB S12400 ' joystick: Upper trigger, joystick B
-190 GOSUB SWITCH_JOYSTICK_ON
+150 On STRIG(2) GOSUB BTN_A_ON ' joystick: Lower trigger, joystick B
+160 On STRIG(0) GOSUB BTN_L_ON ' joystick: Lower trigger, joystick A
+170 On STRIG(4) GOSUB SBTN_G_ON ' joystick: Upper trigger, joystick A
+180 On STRIG(6) GOSUB BTN_U_ON ' joystick: Upper trigger, joystick B
+190 GOSUB JOYSTICK_ON
 
 200 GOSUB S12510
 210 On Error GoTo EXIT_ON_ERROR
@@ -647,7 +647,7 @@ EXIT_ON_ERROR:
 6040 System
 
 6050 Subroutine S6060
-6060 GOSUB 12460
+6060 GOSUB JOYSTICK_OFF
 
 6070 LOCATE 1, 1
 6080 Print "                                                                               "
@@ -816,7 +816,7 @@ EXIT_ON_ERROR:
 7670 IR14 = ((keyPressed$ = "g") Or (keyPressed$ = "l"))
 7680 IR16 = ((keyPressed$ = "u") Or (IR14))
 7690 If ((keyPressed$ = "a") Or (IR16)) = 0 Then GoTo 7730
-7700 GOSUB S6060
+7700 GOSUB JOYSTICK_OFF
 7710 GOSUB S10820
 7720 GOSUB S13930
 7730 GoTo 7050
@@ -1277,56 +1277,31 @@ EXIT_ON_ERROR:
 12110 IR22 = ((keyPressed$ = "6") Or (IR20))
 12120 IR24 = ((keyPressed$ = "7") Or (IR22))
 12130 IR26 = ((keyPressed$ = "8") Or (IR24))
-12140 If ((keyPressed$ = "9") Or (IR26)) = 0 Then GoTo SWITCH_JOYSTICK_ON
+12140 If ((keyPressed$ = "9") Or (IR26)) = 0 Then GoTo JOYSTICK_ON
 12150 buttonPressed$ = ""
 
-SWITCH_JOYSTICK_ON:
-12170 STRIG(0) ON
-12180 STRIG(2) ON
-12190 STRIG(4) ON
-12200 STRIG(6) ON
+JOYSTICK_ON:
+  STRIG(0) ON : STRIG(2) ON : STRIG(4) ON : STRIG(6) ON
 RETURN
 
-12210 Subroutine S12220
-12220 If buttonPressed$ <> "l" Then GoTo 12250
-
-12230 Subroutine S12240
-12240 GoTo 12280
-
-12250 keyPressed$ = "l"
-12260 buttonPressed$ = "l"
-
-' Subroutine S12280
-  12280 If buttonPressed$ <> "a" Then GoTo 12310
-
-  12290 Subroutine S12300
-  12300 GoTo 12340
-
-  12310 keyPressed$ = "a"
-  12320 buttonPressed$ = "a"
+JOYSTICK_OFF
+  STRIG(0) OFF : STRIG(2) OFF : STRIG(4) OFF : STRIG(6) OFF
 RETURN
 
-' Subroutine S12340
-12340 If buttonPressed$ <> "g" Then GoTo 12370
+BTN_L_ON:
+  If buttonPressed$ <> "l" THEN keyPressed$ = "l": buttonPressed$ = "l"
+RETURN
 
-12350 Subroutine S12360
-12360 GoTo 12400
-12370 keyPressed$ = "g"
-12380 buttonPressed$ = "g"
+BTN_A_ON
+  If buttonPressed$ <> "a" THEN keyPressed$ = "a" : buttonPressed$ = "a"
+RETURN
 
-12390 Subroutine S12400
-12400 If buttonPressed$ <> "u" Then GoTo 12430
+BTN_G_ON
+  If buttonPressed$ <> "g" THEN keyPressed$ = "g" : buttonPressed$ = "g"
+RETURN
 
-12410 Subroutine S12420
-12420 GoTo 12460
-12430 keyPressed$ = "u"
-12440 buttonPressed$ = "u"
-
-12460 Subroutine S12470
-  STRIG(0) OFF
-  STRIG(2) OFF
-  STRIG(4) OFF
-  STRIG(6) OFF
+BTN_U_ON
+  If buttonPressed$ <> "u" THEN keyPressed$ = "u" : buttonPressed$ = "u"
 RETURN
 
 12500 Subroutine S12510
