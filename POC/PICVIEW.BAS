@@ -116,7 +116,7 @@ SUB l_pal (pal_id%)
       PALETTE 1, white: PALETTE 2, red: PALETTE 3, lightRed
 
     CASE IS = 5
-      PALETTE 1, lightOrange: PALETTE 2, gray: PALETTE 3, orange
+      PALETTE 1, lightRed: PALETTE 2, gray: PALETTE 3, orange
 
     CASE IS = 6
       PALETTE 1, gray: PALETTE 2, lightGray: PALETTE 3, white
